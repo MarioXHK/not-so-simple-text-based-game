@@ -2,6 +2,9 @@ import random
 import time
 room = 0
 choice = "None"
+hp = 50
+atk = 3
+deff = 1
 inventory = []
 keyitems = []
 ghostkeys = []
@@ -36,20 +39,97 @@ def fancytext(texty, spext, waig = 0):
     else:
         print(texty, end = "")
     time.sleep(int(waig))
+
+
+
+
 def seeroom(hostile,biome = "nul"):
     global room
     global seenrooms
     if not room in seenrooms:
         seenrooms.append(room)
         if room == 0:
-            fancytext("You wake up with a gasp of air. Looking around you're in a very dark part of a large forest.", 40, 2)
-            fancytext("It's nearly impossible to see through this deep darkness, but you can see a light far up north.", 40, 2)
+            fancytext("You wake up with a gasp of air. Looking around you're in a very dark part of a large forest.\n", 40, 1)
+            fancytext("It's nearly impossible to see through this deep darkness, but you can see a light far up north. ", 40, 2)
+        elif room == 1:
+            fancytext("Coming closer to the light, the dark forest gets more illuminated, and you're able to see you're surroundings.\n", 20, 1)
+            fancytext("The tree leaves appear to be a deep purple, the night sky above being filled with cyan stars, managing to even without a sun, bathing the forest ahead in it's light. ", 20, 2)
+        elif room == 2:
+            fancytext("You finally find yourself some breathing space as you're now at an opening, the forest appears to extend from here, and there are so many pathways to choose from.", 20, 1)
+            fancytext("\nNow here, you can truly see that you have indeed ended up far from your school, maybe even in a different realm entirely.", 20, 1)
+            fancytext("\nWhat was that thing Dr. Mo said...? ", 20, 1)
+            fancytext("Either way, it also seams that you're not alone in this forest, many creatures loom, but they clear way as you walk in.\nBut they look like they won't do it the next time.", 20, 2)
     else:
         if room == 0:
-            fancytext("The darkness here is near consuming", 20, 2)
+            fancytext("The darkness here is near consuming, ", 20, 2)
+        elif room == 1:
+            fancytext("The light is coming through, ", 20, 2)
+        else:
+            num = random.randrange(0, 20)
+            if biome = "forest":
+                if num < 4:
+                    fancytext("Tiedie flowers are seen blooming and wilting by the minute, always seeming to reproduce. The cycle of life continuing.", 20, 2)
+                elif num < 10:
+                    fancytext("Birds and bees are flying around the forest, ignoring you in the process.", 20, 2)
+                elif num < 19:
+                    fancytext("The light breeze of forest air fills you with determination.", 20, 2)
+                else:
+                    fancytext("A shooting star flies by in the sky, maybe it's time to make a wish?", 20, 2)
+            if biome = "lightfor":
+                if num < 4:
+                    fancytext("Illuminous birds are flying around, singing heavenly melodies.", 20, 2)
+                elif num < 9:
+                    fancytext("The lights of the forest loom as it's luminosity aluminates you.", 20, 2)
+                elif num < 12:
+                    fancytext("It feels almost like a fresh new day in the forest despite you only being here for less than an hour.", 20, 2)
+                else:
+                    fancytext("This place is just lovely.", 20, 2)
     if room == 0:
         fancytext("Your only option you can see is going north.", 30, 2)
-            
+    elif room == 1:
+        fancytext("North still appears to be where your journey will continue.", 30, 2)
+
+def battlesetup(ebiome = "nul",chance = 5, spec = False):
+    numb = random.randrange(0, chance)
+    if numb = 0:
+        ech = random.randrange(0, 20)
+        monster = "g_cube"
+        if ebiome == "nul":
+            if ech < 9:
+                monster = "cthurkey"
+        if ebiome == "forest":
+            if ech < 6:
+               monster = "live_tnt" 
+            elif ech < 9:
+                monster = "wolf"
+            elif ech < 14:
+                monster = "g_snail"
+            elif ech < 19:
+                monster = "sculker"
+            else:
+                monster = "m_yoyo"
+        battle(monster)
+                
+def battle(monster):
+    global hp
+    global atk
+    global deff
+    global valhelp
+    if monster == "g_cube":
+        eatk = 5
+        edef = 2
+        ehp = 10
+        fancytext("A Generic Cube attacks!", 20, 2)
+    while ehp > 0:
+        print("Your stats: hp:", hp+ ", attack", atk+ ", defence", deff)
+        batchoice = input()
+        if batchoice in valhelp:
+           fancytext("Glad you asked at this time.", 20, 1)
+           fancytext("You are currently inside an enemy battle. The goal is to not die from the enemy.", 50, 1)
+           fancytext("\nThere are many ways to do this, like sparing the enemy or killing it, or just fleeing.", 50, 2)
+           fancytext("to attack the enemy, type in \"attack\", to use one of your inventory items, type in \"use\", to check the enemy's stats, type in \"check\", to spare an enemy, you have to convince it enough by typing in \"convince\" or just by attacking it enough, then you can spare them by typing in \"spare\"", 50, 2)
+        
+    
 
 def default():
     global choice
@@ -136,14 +216,43 @@ if (not choice in valyes) or choice in valno:
 gamenotover = True
 seeroom(False)
 while gamenotover == True:
-    choice = input()
+    choice = input("\n")
+    print(room)
     if room == 0:
         if choice in valnorth:
             room = 1
+        elif choice in vallook:
+            fancytext("It's near impossible to see anything here. ", 20, 1)
+            fancytext("It's all just darkness without end, like if the trees were a perfect shader.", 20, 2)
         else:
             default()
         seeroom(False)
     elif room == 1:
         if choice in valsouth:
             room = 0
+        elif choice in valnorth:
+            room = 2
+            seeroom(True)
+        elif choice in vallook:
+            fancytext("Now in this passageway, you can begin to see the forest more clearly, and it's beautiful in a way.", 20, 1)
+            fancytext("\nAbove you, the trees are allowing the light of the night to shine through into this odd forest of purple trees.", 20, 2)
+        else:
+            default()
+    elif room == 2:
+        if choice in valsouth:
+            room = 1
             seeroom(False)
+        elif choice in valnorth:
+            room = 7
+            seeroom(True)
+        elif choice in valeast:
+            room = 3
+            seeroom(True)
+        elif choice in valwest:
+            room = 9
+            seeroom(True)
+        elif choice in vallook:
+            fancytext("In this opening, you can truly appreciate the forests beauty, nearly everywhere you look there's something about it.", 20, 1)
+            fancytext("\nIt fills you with hopes and dreams", 20, 2)
+        else:
+            default()
