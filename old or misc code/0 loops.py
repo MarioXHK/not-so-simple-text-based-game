@@ -1,0 +1,5 @@
+print ("You never said anything about the amount of lines of code")
+print ("*")
+print ("**")
+print ("***")
+print ("****")
