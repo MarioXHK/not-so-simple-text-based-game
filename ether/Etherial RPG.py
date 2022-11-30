@@ -2,10 +2,13 @@ import random
 import time
 room = 0
 choice = "None"
+maxhp = 50
 hp = 50
-atk = 3
+atk = 5
 deff = 1
-inventory = []
+inventory = ["Gummy Bears"]
+weapon = "Controller"
+armor = "Jacket"
 keyitems = []
 ghostkeys = []
 seenrooms = []
@@ -22,7 +25,9 @@ valuse = {"use","Use"}
 valhelp = {"h","H","help","Help"}
 vallook = {"l","L","look","Look"}
 valyes = {"y", "Y", "Yes", "Yeah", "Sure", "Ok", "Fine", "yes", "yeah", "sure", "ok", "fine"}
-valno = {"n", "N", "No", "Nope", "Nah", "no", "nope", "nah" "Not Today", "not today", "Not today", "not Today"}
+valno = {"n", "N", "No", "Nope", "Nah", "no", "nope", "nah", "Not Today", "not today", "Not today", "not Today"}
+team = ["you"]
+
 def fancytext(texty, spext, waig = 0):
     global haste
     divzex = 1/int(spext)
@@ -95,8 +100,10 @@ def battlesetup(ebiome = "nul",chance = 5, spec = False):
         ech = random.randrange(0, 20)
         monster = "g_cube"
         if ebiome == "nul":
-            if ech < 9:
+            if ech = 1:
                 monster = "cthurkey"
+            if ech = 19:
+                monster = "g_dragon"
         if ebiome == "forest":
             if ech < 6:
                monster = "live_tnt" 
@@ -115,25 +122,153 @@ def battle(monster):
     global atk
     global deff
     global valhelp
+    global valuse
+    global valinv
+    global valquit
+    
+    valatk = {"Attack", "attack"}
+    valcheck = {"Check","check"}
+    valact = {"Act","act"}
+    valspare = {"Mercy", "mercy", "Spare", "spare"}
+    valrun = {"Run", "run", "flee", "Flee"}
+    mercy = False
+    boss = False
+    gamename = "Monster"
     if monster == "g_cube":
         eatk = 5
-        edef = 2
+        edef = 1
         ehp = 10
+        gamename = "Generic Cube"
         fancytext("A Generic Cube attacks!", 20, 2)
-    while ehp > 0:
+    elif monster == "g_dragon":
+        eatk = 10
+        edef = 2
+        ehp = 100
+        gamename = "Generic Dragon"
+        fancytext("A Generic Dragon attacks!", 20, 2)
+    egph = ehp
+    battle = True
+    spare = False
+    runaway = False
+    while battle == True:
         print("Your stats: hp:", hp+ ", attack", atk+ ", defence", deff)
-        batchoice = input()
-        if batchoice in valhelp:
-           fancytext("Glad you asked at this time.", 20, 1)
-           fancytext("You are currently inside an enemy battle. The goal is to not die from the enemy.", 50, 1)
-           fancytext("\nThere are many ways to do this, like sparing the enemy or killing it, or just fleeing.", 50, 2)
-           fancytext("to attack the enemy, type in \"attack\", to use one of your inventory items, type in \"use\", to check the enemy's stats, type in \"check\", to spare an enemy, you have to convince it enough by typing in \"convince\" or just by attacking it enough, then you can spare them by typing in \"spare\"", 50, 2)
+        print("enemy's HP:", ehp)
+        for i in range(len(team)):
+            turn = True
+            while turn == True:
+                if mercy == True:
+                    print(gamename, "is sparing you.")
+                batchoice = input()
+                if batchoice in valhelp:
+                   fancytext("Glad you asked at this time.", 20, 1)
+                   fancytext("You are currently inside an enemy battle. The goal is to not die from the enemy.", 50, 1)
+                   fancytext("\nThere are many ways to do this, like sparing the enemy or killing it, or just fleeing.", 50, 2)
+                   fancytext("to attack the enemy, type in \"attack\", to use one of your inventory items, type in \"use\", to check the enemy's stats, type in \"check\", to spare an enemy, you have to convince it enough by typing in \"action\" or just by attacking it enough, then you can spare them by typing in \"spare\". Sparing gives more money than fighting, but doesn't give you XP. If you want to attempt to run away, type in \"run\".", 50, 2)
+                elif batchoice in valatk:
+                    atkdone = atk+random.randrange(-2,2)
+                    atkdone = atkdone-edef
+                    ehp -= atkdone
+                    fancytext("\nYou attack and deal ", 20)
+                    fancytext(atkdone, 20)
+                    fancytext(" damage!", 20, 2)
+                    if ehp <= (egph/4) and boss == False:
+                        mercy == True
+                    turn = False
+                elif batchoice in valspare:
+                    fancytext("\nYou spared ", 20)
+                    fancytext(gamename, 20, 1)
+                    if mercy == True:
+                        spare = True
+                        battle = False
+                    else:
+                        fancytext("\nBut they weren't sparing you yet", 20, 2)
+                    turn = False
+                elif batchoice in valrun:
+                    fancytext("\nYou tried to run away...", 20, 1)
+                    if random.randrange(0,2) == 0:
+                        runaway = True
+                        battle = False
+                        fancytext("and succeeded.\n", 20, 2)
+                    else:
+                        fancytext("and failed.\n", 20, 2)
+                    turn = False
+                elif batchoice in valcheck:
+                    turn = False
+                    print()
+                    fancytext(gamename, 20)
+                    fancytext(", it's stats are:", 20, 1)
+                    print("attack:" eatk+ ", defence:" edef+ ", max hp:" eghp)
+                    time.sleep(1)
+                    if monster == "g_cube":
+                        fancytext("This generic little cube likes to wander beyond the bounds of reality.\nIt's hard to encounter and if you have encountered it, it's likely that there's a problem or that you're just testing something.\n", 20, 2)
+                elif batchoice in valuse:
+                    fancytext("What will you use? (Please type it exactly as seen in the inventory)", 50)
+                    print("Inventory:", inventory)
+                    batchoice = input()
+                    if batchoice in valquit:
+                        fancytext("Going back...", 50)
+                    elif batchoice in inventory:
+                        gitemuse(batchoice, True)
+                    else:
+                        fancytext(("You don't have an item called", batchoice), 50, 1)
+        if battle == True:
+            etkdone = eatk + random.randrange(-5,5)
+            etkdone = etkdone - deff
+            hp -= etkdone
+            fancytext("The ", 20)
+            fancytext(gamename, 20)
+            fancytext(" attacks and deals ", 20)
+            fancytext(etkdone, 20)
+            fancytext(" damage to you!", 20, 2)
+        else:
+            if runaway == False:
+                fancytext("You Won!")
+            
+                    
+           
+def gitemuse(item, bmode = False):
+    global inventory
+    global weapon
+    global armor
+    global hp
+    global maxhp
+    global weapon
+    global armor
+    global atk
+    global deff
+    
+    if item == "Gummy Bears":
+        hp += 12
+        if hp > maxhp:
+            fancytext("You ate the Gummy Bears and your health maxed out!", 20, 1)
+            hp = maxhp
+        else:
+            fancytext("You ate the Gummy Bears and recovered 12 hp!", 20, 1)
+    if item == "Controller":
+        fancytext("You equipped the controller as a weapon.", 20, 1)
+        atk = 5
+        inventory.append(weapon)
+        weapon = "Controller"
+    if item == "Jacket":
+        fancytext("You wore the jacket.", 20, 1)
+        deff = 1
+        inventory.append(armor)
+        weapon = "Jacket"
         
+
     
 
-def default():
-    global choice
+def default(choice):
     global gamenotover
+    global valhelp
+    global valquit
+    global valinv
+    global valgrab
+    global valuse
+    global inventory
+    global keyitems
+    global valquit
+    
     if choice in valhelp:
         fancytext("Glad you asked!", 30, 2)
         fancytext("You see, to move around here, you have to type in the direction you want to go in, which can be north, south, east, west, up, or down.\n", 50, 2)
@@ -225,7 +360,7 @@ while gamenotover == True:
             fancytext("It's near impossible to see anything here. ", 20, 1)
             fancytext("It's all just darkness without end, like if the trees were a perfect shader.", 20, 2)
         else:
-            default()
+            default(choice)
         seeroom(False)
     elif room == 1:
         if choice in valsouth:
@@ -237,7 +372,7 @@ while gamenotover == True:
             fancytext("Now in this passageway, you can begin to see the forest more clearly, and it's beautiful in a way.", 20, 1)
             fancytext("\nAbove you, the trees are allowing the light of the night to shine through into this odd forest of purple trees.", 20, 2)
         else:
-            default()
+            default(choice)
     elif room == 2:
         if choice in valsouth:
             room = 1
@@ -255,4 +390,4 @@ while gamenotover == True:
             fancytext("In this opening, you can truly appreciate the forests beauty, nearly everywhere you look there's something about it.", 20, 1)
             fancytext("\nIt fills you with hopes and dreams", 20, 2)
         else:
-            default()
+            default(choice)
