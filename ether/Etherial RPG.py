@@ -67,39 +67,55 @@ def seeroom(hostile,biome = "nul"):
         elif room == 2:
             fancytext("You finally find yourself some breathing space as you're now at an opening, the forest appears to extend from here, and there are so many pathways to choose from.", 20, 1)
             fancytext("\nNow here, you can truly see that you have indeed ended up far from your school, maybe even in a different realm entirely.", 20, 1)
-            fancytext("\nWhat was that thing Dr. Mo said...? ", 20, 1)
-            fancytext("Either way, it also seams that you're not alone in this forest, many creatures loom, but they clear way as you walk in.\nBut they look like they won't do it the next time.", 20, 2)
+            fancytext("\nWhat was that thing Dr. Mo said...? ", 20, 2)
+            fancytext("Either way, it also seams that you're not alone in this forest, many creatures loom, but they clear way as you walk in.\nBut they look like they won't do it the next time.", 20, 1)
+        elif room == 3:
+            fancytext("Going further into the forest, you find yourself estranged, all of this happening... A whole new world.\n", 20, 1)
+            fancytext("You can't help but just take a deep breath and let it all in, and that's when you notice again a house up north, it seams big, whoever might live in it?", 20, 1)
+
     else:
         if room == 0:
             fancytext("The darkness here is near consuming, ", 20, 2)
         elif room == 1:
             fancytext("The light is coming through, ", 20, 2)
         else:
-            num = random.randrange(0, 20)
-            if biome == "forest":
-                if num < 4:
-                    fancytext("Tiedie flowers are seen blooming and wilting by the minute, always seeming to reproduce. The cycle of life continuing.", 20, 2)
-                elif num < 10:
-                    fancytext("Birds and bees are flying around the forest, ignoring you in the process.", 20, 2)
-                elif num < 19:
-                    fancytext("The light breeze of forest air fills you with determination.", 20, 2)
-                else:
-                    fancytext("A shooting star flies by in the sky, maybe it's time to make a wish?", 20, 2)
-            if biome == "lightfor":
-                if num < 4:
-                    fancytext("Illuminous birds are flying around, singing heavenly melodies.", 20, 2)
-                elif num < 9:
-                    fancytext("The lights of the forest loom as it's luminosity aluminates you.", 20, 2)
-                elif num < 12:
-                    fancytext("It feels almost like a fresh new day in the forest despite you only being here for less than an hour.", 20, 2)
-                else:
-                    fancytext("This place is just lovely.", 20, 2)
+            if random.randrange(0, 4) == 0 and hostile == True:
+                    battlesetup(biome)
+            else:
+                num = random.randrange(0, 20)
+                if biome == "forest":
+                    if num < 4:
+                        fancytext("Tiedie flowers are seen blooming and wilting by the minute, always seeming to reproduce. The cycle of life continuing.", 20, 2)
+                    elif num < 10:
+                        fancytext("Birds and bees are flying around the forest, ignoring you in the process.", 20, 2)
+                    elif num < 19:
+                        fancytext("The light breeze of forest air fills you with determination.", 20, 2)
+                    else:
+                        fancytext("A shooting star flies by in the sky, maybe it's time to make a wish?", 20, 2)
+                    
+                if biome == "lightfor":
+                    if num < 4:
+                        fancytext("Illuminous birds are flying around, singing heavenly melodies.", 20, 2)
+                    elif num < 9:
+                        fancytext("The lights of the forest loom as it's luminosity aluminates you.", 20, 2)
+                    elif num < 12:
+                        fancytext("It feels almost like a fresh new day in the forest despite you only being here for less than an hour.", 20, 2)
+                    else:
+                        fancytext("This place is just lovely.", 20, 2)
     if room == 0:
         fancytext("Your only option you can see is going north.", 30, 2)
     elif room == 1:
         fancytext("North still appears to be where your journey will continue.", 30, 2)
+    elif room == 2:
+        fancytext("Every way you look there is a place to go, north leading to what appears to be a house of some sort, while east and west are more forest.", 30, 2)
+    elif room == 3:
+        fancytext("There seams to be a house up north while going further east there appears to be a shop.", 30, 2)
+    elif room == 4:
+        fancytext("The door to the house is north while the south leads back into the forest.", 30, 2)
+    elif room == -1:
+        fancytext("The way back is east.", 30, 2)
 
-def battlesetup(ebiome = "nul",chance = 5, spec = False):
+def battlesetup(ebiome = "nul",chance = 5): #Sets a randomly generated battle up
     numb = random.randrange(0, chance)
     if numb == 0:
         ech = random.randrange(0, 20)
@@ -122,7 +138,7 @@ def battlesetup(ebiome = "nul",chance = 5, spec = False):
                 monster = "m_yoyo"
         battle(monster)
                 
-def battle(monster = "g_cube"):
+def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
     global hp
     global atk
     global deff
@@ -134,7 +150,7 @@ def battle(monster = "g_cube"):
     global xp
     global xpreq
     global lvl
-    
+    #A smoothie
     valatk = {"Attack", "attack", "Die", "die", "Kill", "kill"}
     valcheck = {"Check","check"}
     valact = {"Act","act"}
@@ -160,6 +176,54 @@ def battle(monster = "g_cube"):
         boss == True
         gamename = "Generic Dragon"
         fancytext("A Generic Dragon attacks!\n", 20, 1)
+    elif monster == "live_tnt":
+        eatk = 5
+        edef = 0
+        ehp = 5
+        emon = 15
+        sreq = 1
+        gamename = "Living TNT"
+        fancytext("A living piece of TNT hops at you!\n", 20, 1)
+    elif monster == "wolf":
+        eatk = 5
+        edef = 0
+        ehp = 5
+        emon = 15
+        sreq = 1
+        gamename = "Wolf"
+        fancytext("A Lone Wolf jumps for you!\n", 20, 1)
+    elif monster == "g_snail":
+        eatk = 3
+        edef = 10
+        ehp = 5
+        emon = 12
+        sreq = 1
+        gamename = "Gigasnail"
+        fancytext("A Giga Snail slowly comes at you!\n", 20, 1)
+    elif monster == "sculker":
+        eatk = 8
+        edef = 8
+        ehp = 8
+        emon = 25
+        sreq = 5
+        gamename = "Sculker"
+        fancytext("A Sculker senses you!\n", 20, 1)
+    elif monster == "m_yoyo":
+        eatk = 6
+        edef = 2
+        ehp = 7
+        emon = 22
+        sreq = 2
+        gamename = "Magic Yoyo"
+        fancytext("A sentient magical Yoyo swings at you!\n", 20, 1)
+    else: #For when an invalid monster is put
+        eatk = 1
+        edef = 1
+        ehp = 1
+        emon = 1
+        sreq = 1
+        gamename = "Missingno"
+        fancytext("A wild Missingno appears! Something has gone terribly wrong!\n", 20, 1)
     egph = ehp
     battle = True
     spare = False
@@ -179,7 +243,6 @@ def battle(monster = "g_cube"):
                    fancytext("You are currently inside an enemy battle. The goal is to not die- I mean get knocked out from the enemy.\nThere are many ways to do this, like sparing the enemy or killing it, or just fleeing.\nto attack the enemy, type in \"attack\",\nto use one of your inventory items, type in \"use\", to check the enemy's stats, type in \"check\",\nto spare an enemy, you have to convince it enough by typing in \"action\" or just by attacking it enough, then you can spare them by typing in \"spare\".\nSparing gives more money than fighting, but doesn't give you XP.\nIf you want to attempt to run away, type in \"run\".", 50, 2)
                 elif batchoice in valatk:
                     atkdone = (atk+random.randrange(-2,2)) * lvl
-                    print(atk)
                     if mercy == True:
                         atkdone = atkdone*2
                     atkdone = atkdone-edef
@@ -201,9 +264,21 @@ def battle(monster = "g_cube"):
                     turn = False
                 elif batchoice in valact:
                     if monster == "g_cube":
-                        fancytext("You wiggled some of your body at the Generic cube, the cube has no feelings for this.\n", 20)
+                        fancytext("You wiggled some of your body at the Generic cube, the cube has no feelings for this.\n", 20, 2)
                     elif monster == "g_dragon":
-                        fancytext("You drooled at the dragon and the dragon was somewhat disgusted by your action...\n", 20)
+                        fancytext("You drooled at the dragon and the dragon was somewhat disgusted by your action...\n", 20, 2)
+                    elif monster == "live_tnt":
+                        fancytext("You drenched the Living TNT in water, and it becomes more content.", 20, 2)
+                    elif monster == "wolf":
+                        fancytext("You try and pet the wolf, and somewhat succeed.", 20, 2)
+                    elif monster == "g_snail":
+                        fancytext("You wiggled to try and tell the snail something... It seems amused.", 20, 2)
+                    elif monster == "sculker":
+                        fancytext("You grab some of the stuff from the ground and throw it at the Sculker to distract it.", 20, 2)
+                    elif monster == "m_yoyo":
+                        fancytext("You grab the yoyo, but it flew free of your grasp, looking a bit upset.", 20, 2)
+                    else:
+                        fancytext("You calm the monster down.", 20, 2)
                     spval += 1
                     turn = False
                 elif batchoice in valrun:
@@ -226,6 +301,10 @@ def battle(monster = "g_cube"):
                         fancytext("This generic little cube likes to wander beyond the bounds of reality.\nIt's hard to encounter and if you have encountered it, it's likely that there's a problem or that you're just testing something.\n", 20, 2)
                     elif monster == "g_dragon":
                         fancytext("This standard dragon looms over you, seeming fearless.\n", 20, 2)
+                    elif monster == "live_tnt":
+                        fancytext("This living TNT doesn't appear to be so harmful unless you attack it.\n", 20, 2)
+                    else:
+                        fancytext("A real monster!\n", 20, 2)
                 elif batchoice in valuse:
                     fancytext("What will you use? (Please type it exactly as seen in the inventory)\n", 50)
                     print("Inventory:", inventory)
@@ -242,21 +321,29 @@ def battle(monster = "g_cube"):
         if ehp <= 0:
             battle = False
             fancytext(gamename, 20)
-            fancytext(" was defeated!", 20, 1)
+            if monster == "live_tnt":
+                hp -= 20
+                fancytext(" blew up and delt a harsh 20 damage!", 20, 1)
+                if hp <= 0:
+                    killsequence()
+            else:
+                fancytext(" was defeated!", 20, 1)
         if battle == True:
             etkdone = eatk + random.randrange(-5,5)
             etkdone = etkdone - deff
-            hp -= etkdone
-            fancytext("The ", 20)
-            fancytext(gamename, 20)
-            fancytext(" attacks and deals ", 20)
-            fancytext(str(etkdone), 20)
-            fancytext(" damage to you!\n", 20, 1)
+            if atkdone < 0:
+                fancytext("The ", 20)
+                fancytext(gamename, 20)
+                fancytext(" attacks but deals no damage!", 20)
+            else:
+                hp -= etkdone
+                fancytext("The ", 20)
+                fancytext(gamename, 20)
+                fancytext(" attacks and deals ", 20)
+                fancytext(str(etkdone), 20)
+                fancytext(" damage to you!\n", 20, 1)
             if hp <= 0:
-                fancytext("You ran out of hp!\n", 20, 1)
-                fancytext("You got knocked out...\n", 20, 2)
-                fancytext("\nGAME OVER\n", 10, 2)
-                exit()
+                killsequence()
             if sreq <= spval:
                 mercy = True
         else:
@@ -279,6 +366,12 @@ def battle(monster = "g_cube"):
                     inventory.append("Generic Sword")
                     fancytext("The Generic Cube dropped a Generic Sword! How generic!\n", 20, 2)
             
+def killsequence():
+    fancytext("You ran out of hp!\n", 20, 1)
+    fancytext("You got knocked out...\n", 20, 2)
+    fancytext("\nGAME OVER\n", 10, 2)
+    exit()
+
 def leveling(thexp):
     global xp
     global xpreq
@@ -315,17 +408,17 @@ def gitemuse(item, bmode = False):
             hp = maxhp
         else:
             fancytext("You ate the Gummy Bears and recovered 12 hp!\n", 20, 1)
-    if item == "Controller":
+    elif item == "Controller":
         fancytext("You equipped the controller as a weapon.\n", 20, 1)
         atk = 5
         inventory.append(weapon)
         weapon = "Controller"
-    if item == "Generic Sword":
+    elif item == "Generic Sword":
         fancytext("You equipped the Generic Sword.\n", 20, 1)
         atk = 20
         inventory.append(weapon)
         weapon = "Generic Sword"
-    if item == "Jacket":
+    elif item == "Jacket":
         fancytext("You wore the jacket.\n", 20, 1)
         deff = 1
         inventory.append(armor)
@@ -401,8 +494,6 @@ if choice in valyes:
     haste = True
 else:
     haste = False
-battle()
-battle("g_dragon")
 fancytext("Do you want to skip the intro?\n", 50)
 choice = input()
 fancytext("To look at the list of what you can do at any time, type in help.\n", 50, 2)
@@ -465,13 +556,28 @@ while gamenotover == True:
             room = 1
             seeroom(False)
         elif choice in valnorth:
-            room = 7
+            room = 4
             seeroom(True)
         elif choice in valeast:
             room = 3
             seeroom(True)
         elif choice in valwest:
             room = 9
+            seeroom(True)
+        elif choice in vallook:
+            fancytext("In this opening, you can truly appreciate the forests beauty, nearly everywhere you look there's something about it.", 20, 1)
+            fancytext("\nIt fills you with hopes and dreams", 20, 2)
+        else:
+            default(choice)
+    elif room == 3:
+        if choice in valnorth:
+            room = 4
+            seeroom(True)
+        elif choice in valeast:
+            room = -1
+            seeroom(True)
+        elif choice in valwest:
+            room = 2
             seeroom(True)
         elif choice in vallook:
             fancytext("In this opening, you can truly appreciate the forests beauty, nearly everywhere you look there's something about it.", 20, 1)
