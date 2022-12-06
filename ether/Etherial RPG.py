@@ -79,7 +79,7 @@ def seeroom(hostile,biome = "nul"):
         elif room == 1:
             fancytext("The light is coming through, ", 20, 2)
         else:
-            if random.randrange(0, 4) == 0 and hostile == True:
+            if random.randrange(0, 4) == 2 and hostile == True:
                     battlesetup(biome)
             else:
                 num = random.randrange(0, 20)
@@ -100,6 +100,8 @@ def seeroom(hostile,biome = "nul"):
                         fancytext("The lights of the forest loom as it's luminosity aluminates you.", 20, 2)
                     elif num < 12:
                         fancytext("It feels almost like a fresh new day in the forest despite you only being here for less than an hour.", 20, 2)
+                    elif num < 18:
+                        fancytext("It feels like you could get lost by staying long enough, but maybe you wouldn't mind.", 20, 2)
                     else:
                         fancytext("This place is just lovely.", 20, 2)
     if room == 0:
@@ -115,28 +117,122 @@ def seeroom(hostile,biome = "nul"):
     elif room == -1:
         fancytext("The way back is east.", 30, 2)
 
-def battlesetup(ebiome = "nul",chance = 5): #Sets a randomly generated battle up
-    numb = random.randrange(0, chance)
-    if numb == 0:
-        ech = random.randrange(0, 20)
-        monster = "g_cube"
-        if ebiome == "nul":
-            if ech == 1:
-                monster = "cthurkey"
-            if ech == 19:
-                monster = "g_dragon"
-        if ebiome == "forest":
-            if ech < 6:
-               monster = "live_tnt" 
-            elif ech < 9:
-                monster = "wolf"
-            elif ech < 14:
-                monster = "g_snail"
-            elif ech < 19:
-                monster = "sculker"
+def shop(items, dio = 0):
+    global valhelp
+    global invntory
+    global money
+    global valquit
+    global valyes
+    
+    validitems = {
+        "Soft Chips": 10,
+        "Pumpkin Helmet": 20,
+        "Attack Ruby": 25,
+        "Convincing Stone": 30,
+        "Gummy Bears": 15,
+        "Iron Sword": 50,
+        "Pipeline Shield": 45,
+        "Legendary Burger": 100
+    }
+    valbuy = {"buy","Buy","b","B"}
+    valsell = {"sell","Sell","S","s"}
+    valtalk = {"talk","Talk","chat","Chat","t","T","c","C"}
+    if dio == 0:
+        fancytext("\"Welcome to this shop.\"", 20, 1)
+    elif dio == 1:
+        fancytext("\"Welcome, welcome! What would you like?\"", 20, 1)
+    shopq = False
+    
+    while shopq == False:
+        fancytext("Shop items: ", 30)
+        for i in items:
+            print(i, end = " ")
+            print(validitems[i], end = " ")
+        print()
+        print("Your Inventory:", inventory)
+        shopreq = input()
+        if shopreq in valhelp:
+            fancytext("This is a shop, you can either buy or sell items here, each respectively being able to be used by typing in \"buy\" and \"sell\". You are also able to talk to the shopkeeper if you'd like by typing in \"talk\"", 20, 1)
+        elif shopreq in valbuy:
+            if dio == 0:
+                fancytext("\"What are you buying?\"", 20, 1)
+            elif dio == 1:
+                fancytext("\"What are ya buying?\"", 20, 1)
+            fancytext("(Type exactly as shown)", 20, 1)
+            shopreq = input()
+            if shopreq in items:
+                if validitems[shopreq] <= money:
+                    money -= validitems[shopreq]
+                    inventory.append(shopreq)
+                    if dio == 0:
+                        fancytext("\"Thank you.\"", 20, 1)
+                    elif dio == 1:
+                        fancytext("\"Grand.\"", 20, 1)
+                else:
+                    if dio == 0:
+                        fancytext("\"You can't afford that.\"", 20, 1)
+                    elif dio == 1:
+                        fancytext("\"That isn't enough money!\"", 20, 1)
             else:
-                monster = "m_yoyo"
-        battle(monster)
+                if dio == 0:
+                    fancytext("\"That isn't available.\"", 20, 1)
+                elif dio == 1:
+                    fancytext("\"That ain't an option!\"", 20, 1)
+        elif shopreq in valsell:
+            if dio == 0:
+                fancytext("\"What are you selling?\"", 20, 1)
+            elif dio == 1:
+                fancytext("\"What are ya giving me?\"", 20, 1)
+            fancytext("(Type exactly as shown)", 20, 1)
+            shopreq = input()
+            if shopreq in inventory:
+                money += validitems[shopreq]/2
+                if dio == 0:
+                    fancytext("\"Thanks.\"", 20, 1)
+                elif dio == 1:
+                    fancytext("\"Hehaha!\"", 20, 1)
+        elif shopreq in valquit:
+            fancytext("Are you sure you want to leave?", 20, 1)
+            shopreq = input()
+            if shopreq in valyes:
+                if dio == 0:
+                    fancytext("\"Thank you for shopping.\"", 20, 1)
+                elif dio == 1:
+                    fancytext("\"Pleasure doing buisness with ya.\"", 20, 1)
+                shopq = True
+
+
+def battlesetup(ebiome = "nul",): #Sets a randomly generated battle up
+    ech = random.randrange(0, 20)
+    monster = "g_cube"
+    if ebiome == "nul":
+        if ech == 1:
+            monster = "cthurkey"
+        if ech == 19:
+            monster = "g_dragon"
+    elif ebiome == "forest":
+        if ech < 6:
+               monster = "live_tnt" 
+        elif ech < 9:
+            monster = "wolf"
+        elif ech < 14:
+            monster = "g_snail"
+        elif ech < 19:
+            monster = "sculker"
+        else:
+            monster = "m_yoyo"
+    elif ebiome == "lightfor":
+        if ech < 5:
+            monster = "sculker" 
+        elif ech < 12:
+            monster = "m_squid"
+        elif ech < 17:
+            monster = "wisp"
+        elif ech < 19:
+            monster = "g_frog"
+        else:
+            monster = "portalmaker"
+    battle(monster)
                 
 def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
     global hp
@@ -156,6 +252,12 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
     valact = {"Act","act"}
     valspare = {"Mercy", "mercy", "Spare", "spare"}
     valrun = {"Run", "run", "flee", "Flee"}
+    valrock = {"Rock", "rock", "r", "R"}
+    valpaper = {"Paper", "paper", "p", "P"}
+    valscissors = {"Scissors", "scissors", "s", "S"}
+    
+    
+    
     mercy = False
     boss = False
     gamename = "Monster"
@@ -166,6 +268,11 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
         emon = 10
         sreq = 2
         gamename = "Generic Cube"
+        print("")
+        print("")
+        print("")
+        print("")
+        print("")
         fancytext("A Generic Cube attacks!\n", 20, 1)
     elif monster == "g_dragon":
         eatk = 15
@@ -175,6 +282,11 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
         sreq = 7
         boss == True
         gamename = "Generic Dragon"
+        print("^^")
+        print("owo>>")
+        print("~<=~<~")
+        print("  _____==>")
+        print("    v  v")
         fancytext("A Generic Dragon attacks!\n", 20, 1)
     elif monster == "live_tnt":
         eatk = 5
@@ -216,6 +328,30 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
         sreq = 2
         gamename = "Magic Yoyo"
         fancytext("A sentient magical Yoyo swings at you!\n", 20, 1)
+    elif monster == "m_squid":
+        eatk = 7
+        edef = 0
+        ehp = 15
+        emon = 13
+        sreq = 2
+        gamename = "Music Squid"
+        fancytext("A musical squid comes to ink you up!\n", 20, 1)
+    elif monster == "wisp":
+        eatk = 2
+        edef = 10
+        ehp = 1
+        emon = 20
+        sreq = 0
+        gamename = "Wisp"
+        fancytext("A Wisp sneaks up on you!\n", 20, 1)
+    elif monster == "rps_legend":
+        eatk = 10
+        edef = 10
+        ehp = 100
+        emon = 100
+        sreq = 10
+        gamename = "Rock Paper Scissors Legend"
+        fancytext("The Rock Paper Scissors Legend stands their ground!\n", 20, 1)
     else: #For when an invalid monster is put
         eatk = 1
         edef = 1
@@ -233,6 +369,8 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
         print("Your stats: hp:", hp, "attack", atk, "defence", deff)
         print("enemy's HP:", ehp)
         for i in range(len(team)):
+            if sreq <= spval:
+                mercy = True
             turn = True
             while turn == True:
                 if mercy == True:
@@ -240,7 +378,7 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
                 batchoice = input()
                 if batchoice in valhelp:
                    fancytext("Glad you asked at this time.\n", 50, 1)
-                   fancytext("You are currently inside an enemy battle. The goal is to not die- I mean get knocked out from the enemy.\nThere are many ways to do this, like sparing the enemy or killing it, or just fleeing.\nto attack the enemy, type in \"attack\",\nto use one of your inventory items, type in \"use\", to check the enemy's stats, type in \"check\",\nto spare an enemy, you have to convince it enough by typing in \"action\" or just by attacking it enough, then you can spare them by typing in \"spare\".\nSparing gives more money than fighting, but doesn't give you XP.\nIf you want to attempt to run away, type in \"run\".", 50, 2)
+                   fancytext("You are currently inside an enemy battle. The goal is to not die- I mean get knocked out from the enemy.\nThere are many ways to do this, like sparing the enemy or killing it, or just fleeing.\nto attack the enemy, type in \"attack\",\nto use one of your inventory items, type in \"use\", to check the enemy's stats, type in \"check\",\nto spare an enemy, you have to convince it enough by typing in \"action\" or just by attacking it enough, then you can spare them by typing in \"spare\".\nSparing gives more money than fighting, but doesn't give you XP.\nIf you want to attempt to run away, type in \"run\" to initiate a rock paper scissors battle, if you win, you can run away.", 50, 2)
                 elif batchoice in valatk:
                     atkdone = (atk+random.randrange(-2,2)) * lvl
                     if mercy == True:
@@ -282,14 +420,122 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
                     spval += 1
                     turn = False
                 elif batchoice in valrun:
-                    fancytext("You tried to run away...\n", 20, 1)
-                    if random.randrange(0,2) == 0 and boss == False:
-                        runaway = True
-                        battle = False
-                        fancytext("and succeeded.\n", 20, 1)
+                    fancytext("Pick rock paper or scissors\n", 20, 1)
+                    batchoice = input()
+                    fancytext("Rock...Paper...Scissors...\n", 10, 1)
+                    fancytext("SHOOT!\n", 50)
+                    if monster == "live_tnt":
+                        if random.randrange(0,4) == 0:
+                            enchoice = "rock"
+                        else:
+                            enchoice = "paper"
+                    elif monster == "wolf":
+                        if random.randrange(0,2) == 0:
+                            enchoice = "scissors"
+                        else:
+                            enchoice = "rock"
+                    elif monster == "g_snail":
+                        enchoice = "rock"
+                    elif monster == "m_yoyo":
+                        enchoice = "paper"
+                    elif monster == "sculker":
+                        enchoice = "scissors"
+                    elif monster == "m_squid":
+                        enchoice = batchoice
+                    elif monster == "rps_legend":
+                        if random.randrange(0,2) == 0:
+                                enchoice = batchoice
+                        else:
+                            if enchoice == 0:
+                                enchoice = "rock"
+                            elif enchoice == 1:
+                                enchoice = "paper"
+                            elif enchoice == 2:
+                                enchoice = "scissors"
                     else:
-                        fancytext("and failed.\n", 20, 1)
-                    turn = False
+                        enchoice = random.randrange(0,3)
+                        if enchoice == 0:
+                            enchoice = "rock"
+                        elif enchoice == 1:
+                            enchoice = "paper"
+                        elif enchoice == 2:
+                            enchoice = "scissors"
+                    
+                    if batchoice in valrock:
+                        print(" ___")
+                        print("(    )")
+                        print("~~~~~")
+                        batchoice = "rock"
+                    if batchoice in valpaper:
+                        print("____")
+                        print("|   |")
+                        print("____")
+                        batchoice = "paper"
+                    if batchoice in valscissors:
+                        print("|\\/|")
+                        print("\\  /")
+                        print("0 0")
+                        batchoice = "scissors"
+                    else:
+                        print("\\ /")
+                        print(" X ")
+                        print("/ \\")
+                        batchocie = "none"
+                        
+                    if enchoice in valrock:
+                        print(" ___")
+                        print("(    )")
+                        print("~~~~~")
+                        batchoice = "rock"
+                    if enchoice in valpaper:
+                        print("____")
+                        print("|   |")
+                        print("____")
+                        batchoice = "paper"
+                    if enchoice in valscissors:
+                        print("|\\/|")
+                        print("\\  /")
+                        print("0`0")
+                        enchoice = "scissors"
+                    else:
+                        print("\\ /")
+                        print(" X ")
+                        print("/ \\")
+                        enchoice = "none"
+                    if batchoice == enchoice:
+                        fancytext("A draw!", 20, 1)
+                    else:
+                        if batchoice == "none":
+                            fancytext("You didn't do a move! Automatic loss!", 20, 1)
+                        elif enchoice == "none":
+                            fancytext("The enemy didn't do a move! Automatic win!", 20, 1)
+                            battle = False
+                            runaway = True
+                        elif batchoice == "rock":
+                            if enchoice == "paper":
+                                fancytext("Paper covers rock, you lose!", 20, 1)
+                            elif enchoice == "scissors":
+                                fancytext("Rock crushes scissors, you win!", 20, 1)
+                                battle = False
+                                runaway = True
+                        elif batchoice == "paper":
+                            if enchoice == "rock":
+                                fancytext("Paper covers rock, you win!", 20, 1)
+                            elif enchoice == "scissors":
+                                fancytext("scissors cuts paper, you lose!", 20, 1)
+                                battle = False
+                                runaway = True
+                        elif batchoice == "scissors":
+                            if enchoice == "rock":
+                                fancytext("Rock crushes scissors, you lose!", 20, 1)
+                            elif enchoice == "paper":
+                                fancytext("scissors cuts paper, you win!", 20, 1)
+                                battle = False
+                                runaway = True
+                                
+                        
+                    
+                    
                 elif batchoice in valcheck:
                     turn = False
                     print()
@@ -344,8 +590,6 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
                 fancytext(" damage to you!\n", 20, 1)
             if hp <= 0:
                 killsequence()
-            if sreq <= spval:
-                mercy = True
         else:
             if runaway == False:
                 fancytext("You Won!\n", 20, 2)
