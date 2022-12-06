@@ -39,4 +39,4 @@ def shop(coin):
                 exit()
             else:
                 return coin
-shop(mon)
+mon = shop(mon)
