@@ -12,25 +12,25 @@ xpreq = 50
 inventory = ["Gummy Bears"]
 weapon = "Controller"
 armor = "Jacket"
+speedrun = False
 
-
-
+haste = False
 
 
 def atk():
     global weapon
     global lvl
     weapondic = {"Controller":5,"Soft Sword":10,"Iron Sword":15,"Generic Sword":20}
-    return weapondict[weapon] + lvl 
+    return weapondic[weapon] + (lvl-1)
     
 def deff():
     global armor
     global lvl
     armordic = {"Jacket":1,"Pumpkin Helmet":3,"Scarlet Hide":7,"Pipeline Shield":10,"Zomboid Jacket":15}
-    return armordic[armor] + lvl
+    return armordic[armor] + (lvl-1)
 
 keyitems = []
-ghostkeys = []
+ghostitems = []
 seenrooms = []
 valnorth = {"n","N","north","North"}
 valsouth = {"s","S","south","South"}
@@ -51,6 +51,7 @@ team = ["you"]
 
 def fancytext(texty, spext, waig = 0):
     global haste
+    global speedrun
     divzex = 1/int(spext)
     if haste == False:
         for i in range(len(texty)):
@@ -64,13 +65,15 @@ def fancytext(texty, spext, waig = 0):
             time.sleep(divzex)
     else:
         print(texty, end = "")
-    time.sleep(int(waig))
+    if speedrun == False:
+        time.sleep(int(waig))
 
 
 
 
 def seeroom(hostile, room, biome = "nul"):
     global seenrooms
+    global team
     if not room in seenrooms:
         seenrooms.append(room)
         if room == 0:
@@ -87,6 +90,35 @@ def seeroom(hostile, room, biome = "nul"):
         elif room == 3:
             fancytext("Going further into the forest, you find yourself estranged, all of this happening... A whole new world.\n", 20, 1)
             fancytext("You can't help but just take a deep breath and let it all in, and that's when you notice again a house up north, it seams big, whoever might live in it?", 20, 1)
+        elif room == 4:
+            fancytext("Approaching the house, you get onto it's porch, you wonder who or what could be inside so you decide to knock on the door, but nobody answers.\n", 20, 1)
+            fancytext("On the porch there is just a garden gnome and a rotted out welcome mat.", 20, 1)
+        elif room == 5:
+            fancytext("Entering the house, you are in what appears to be the living room of the house, with a furry couch and a ball on it.\n", 20, 1)
+            fancytext("There are many things all around the room that make you wonder just how did the owner of this house collect all of this?", 20, 1)
+            fancytext("It was wrong, but you had a feeling of wanting to explore deeper inside this place.", 20, 1)
+        elif room == 6:
+            fancytext("Entering the next room, it's a corridor that paths out to many other rooms, such as a bathroom, bedroom, and kitchen, strangely having a few signs of activity despite you not seeing anyone in them.\n", 20, 1)
+            fancytext("You could spot many things, but the one thing that most interested you was a hatch on the ceiling with a rope on it, appearing to lead to the upstairs of this house.", 20, 1)
+            fancytext("There was also a back door, however, it seamed to be combination locked from the inside... strange.", 20, 1)
+        elif room == 7:
+            fancytext("Going up the ladder, you see many more trinkets here than there were in the living room, practically filling up this entire part of the house.\n", 20, 1)
+            fancytext("There is a light coming from the room to the west, with that cat silhouette from the window also noticable from here.", 20, 1)
+            fancytext("Maybe you could see what this cat was.", 20, 1)
+        elif room == 8:
+            fancytext("You finally enter the room, and you now see the cat person in the room as well, holding a candle in one hand, with a cloak on.\n", 20, 1)
+            fancytext("'Greetings, human, I have been expecting you-'", 10)
+            fancytext(" Suddenly the cat trips and drops the candle.\n", 20, 1)
+            fancytext("'CRAP-' A small fire happens on the floor and the cat stomps it out, but then the cat notices a fire on the cloak and then just dunks themselves in a bunch of water.\n", 20, 1)
+            fancytext("'...", 10,1)
+            fancytext("Well that went horribly...", 10)
+            fancytext("Sorry, I fumbled that introduction, I'm Zoey, the main cat of the Ether.\n", 20,1)
+            fancytext("You look lost, seams like you've never been to the Ether before. I guess you want to try and get out of here as fast as possible.\n", 20,1)
+            fancytext("I can help you with that, we can be a team, y'know.", 20,1)
+            fancytext(" Also, I know the combination of the back door,\nand you'll need me to get through it and enter the glow forest, which is possibly your only way to get back.\n", 20,1)
+            fancytext("There, you can find the fibers of life, and those can take you back to your own world. So let's go!'\n", 20,1)
+            fancytext("ZOEY JOINED THE PARTY!", 10,1)
+            team.append("Zoey")
         elif room == -1:
             fancytext("Going further east you find a small stand that you could maybe buy things from.\n", 20, 1)
             fancytext("Perhaps by typing in \"shop\" you could access this store", 20, 1)
@@ -96,6 +128,13 @@ def seeroom(hostile, room, biome = "nul"):
             fancytext("The darkness here is near consuming, ", 20, 2)
         elif room == 1:
             fancytext("The light is coming through, ", 20, 2)
+        elif room == 5:
+            fancytext("A small breeze enters the house.", 20, 2)
+        elif room == 6:
+            if random.randrange(0, 3) == 2:
+                fancytext("Some mice are battling for cheese in the bedroom.", 20, 2)
+            else:
+                fancytext("The ceiling light flickers a bit.", 20, 2)
         else:
             if random.randrange(0, 4) == 2 and hostile == True:
                     battlesetup(biome)
@@ -123,17 +162,25 @@ def seeroom(hostile, room, biome = "nul"):
                     else:
                         fancytext("This place is just lovely.", 20, 2)
     if room == 0:
-        fancytext("Your only option you can see is going north.", 30, 2)
+        fancytext("\nYour only option you can see is going north.", 30, 2)
     elif room == 1:
-        fancytext("North still appears to be where your journey will continue.", 30, 2)
+        fancytext("\nNorth still appears to be where your journey will continue.", 30, 2)
     elif room == 2:
-        fancytext("Every way you look there is a place to go, north leading to what appears to be a house of some sort, while east and west are more forest.", 30, 2)
+        fancytext("\nEvery way you look there is a place to go, north leading to what appears to be a house of some sort, while east and west are more forest.\n", 30, 2)
     elif room == 3:
-        fancytext("There seams to be a house up north while going further east there appears to be a shop.", 30, 2)
+        fancytext("\nThere is a house up north while going further east there appears to be a shop.\n", 30, 2)
     elif room == 4:
-        fancytext("The door to the house is north while the south leads back into the forest.", 30, 2)
+        fancytext("\nThe door to the house is north while the south leads back into the forest.\n", 30, 2)
+    elif room == 5:
+        fancytext("\nYou can go back the way you came, or go east into a corridor.\n", 30, 2)
+    elif room == 6:
+        fancytext("\nYou could maybe go upstairs, or try the door on the north.\n", 30, 2)
+    elif room == 7:
+        fancytext("\nYou can go downstairs or to the westmost room.\n", 30, 2)
+    elif room == 8:
+        fancytext("\nUnless you consider the window here an exit, the only way back is east.\n", 30, 2)
     elif room == -1:
-        fancytext("The way back is east.", 30, 2)
+        fancytext("\nThe way back is west.\n", 30, 2)
 
 def shop(yeses, quits, helping,items, monin, dio = 0):
     global invntory
@@ -149,6 +196,7 @@ def shop(yeses, quits, helping,items, monin, dio = 0):
         "Attack Ruby": 26,
         "Convincing Stone": 30,
         "Gummy Bears": 16,
+        "Bear Burger": 40,
         "Iron Sword": 50,
         "Scarlet Hide":30,
         "Pipeline Shield": 44,
@@ -158,9 +206,9 @@ def shop(yeses, quits, helping,items, monin, dio = 0):
     valsell = {"sell","Sell","S","s"}
     valtalk = {"talk","Talk","chat","Chat","t","T","c","C", "Lore", "lore", "l", "L"}
     if dio == 0:
-        fancytext("\"Welcome to this shop.\"", 20, 1)
+        fancytext("\"Welcome to this shop.\"\n", 20, 1)
     elif dio == 1:
-        fancytext("\"Welcome, welcome! What would you like?\"", 20, 1)
+        fancytext("\"Welcome, welcome! What would you like?\"\n", 20, 1)
     shopq = False
     
     while shopq == False:
@@ -170,34 +218,41 @@ def shop(yeses, quits, helping,items, monin, dio = 0):
             print(validitems[i], end = "$ ")
         print()
         print("Your Inventory:", inventory)
+        print("Your Money:", monin)
         shopreq = input("\n")
         if shopreq in helping:
             fancytext("This is a shop, you can either buy or sell items here, each respectively being able to be used by typing in \"buy\" and \"sell\". You are also able to talk to the shopkeeper if you'd like by typing in \"talk\"", 20, 1)
         elif shopreq in valbuy:
             if dio == 0:
-                fancytext("\"What are you buying?\"", 20, 1)
+                fancytext("\"What are you buying?\"\n", 20, 1)
             elif dio == 1:
-                fancytext("\"What are ya buying?\"", 20, 1)
+                fancytext("\"What are ya buying?\"\n", 20, 1)
             fancytext("(Type exactly as shown)", 20, 1)
             shopreq = input("\n")
             if shopreq in items:
                 if validitems[shopreq] <= monin:
-                    monin -= validitems[shopreq]
-                    inventory.append(shopreq)
-                    if dio == 0:
-                        fancytext("\"Thank you.\"", 20, 1)
-                    elif dio == 1:
-                        fancytext("\"Grand.\"", 20, 1)
+                    if len(inventory) < 10:
+                        monin -= validitems[shopreq]
+                        inventory.append(shopreq)
+                        if dio == 0:
+                            fancytext("\"Thank you.\"\n", 20, 1)
+                        elif dio == 1:
+                            fancytext("\"Grand.\"\n", 20, 1)
+                    else:
+                        if dio == 0:
+                            fancytext("\"You don't seam to have enough space in your inventory.\"\n", 20, 1)
+                        elif dio == 1:
+                            fancytext("\"Seams like your pockets are full, can't fit this in there.\"\n", 20, 1)
                 else:
                     if dio == 0:
-                        fancytext("\"You can't afford that.\"", 20, 1)
+                        fancytext("\"You can't afford that.\"\n", 20, 1)
                     elif dio == 1:
-                        fancytext("\"That isn't enough money!\"", 20, 1)
+                        fancytext("\"That aint enough money!\"\n", 20, 1)
             else:
                 if dio == 0:
-                    fancytext("\"That isn't available.\"", 20, 1)
+                    fancytext("\"That isn't available.\"\n", 20, 1)
                 elif dio == 1:
-                    fancytext("\"That ain't an option!\"", 20, 1)
+                    fancytext("\"That ain't an option!\"\n", 20, 1)
         elif shopreq in valsell:
             if dio == 0:
                 fancytext("\"What are you selling?\"", 20, 1)
@@ -206,16 +261,24 @@ def shop(yeses, quits, helping,items, monin, dio = 0):
             fancytext("(Type exactly as shown)", 20, 1)
             shopreq = input("\n")
             if shopreq in inventory:
-                monin += validitems[shopreq]/2
+                sellval = validitems[shopreq]/2
+                monin += sellval
+                inventory.remove(shopreq)
+                fancytext("Sold ", 20)
+                fancytext(shopreq, 20)
+                fancytext(" for ", 20)
+                fancytext(str(sellval), 20)
+                fancytext(" dollars.\n", 20, 1)
                 if dio == 0:
-                    fancytext("\"Thanks.\"", 20, 1)
+                    fancytext("\"Thank you.\"\n", 20, 1)
                 elif dio == 1:
-                    fancytext("\"Hehaha!\"", 20, 1)
+                    fancytext("\"Hehaha, thanks!\"\n", 20, 1)
+                
             else:
                 if dio == 0:
-                    fancytext("\"You don't have an item by that name.\"", 20, 1)
+                    fancytext("\"You don't have an item by that name.\"\n", 20, 1)
                 elif dio == 1:
-                    fancytext("\"Can't take what you don't have.\"", 20, 1)
+                    fancytext("\"Can't take what you don't have.\"\n", 20, 1)
         elif shopreq in valtalk:
             if dio == 0:
                     fancytext("\"Oh, I'm just a simple shopkeeper, nothing to see here.\"", 20, 1)
@@ -237,10 +300,11 @@ def shop(yeses, quits, helping,items, monin, dio = 0):
             shopreq = input("\n")
             if shopreq in yeses:
                 if dio == 0:
-                    fancytext("\"Thank you for shopping.\"", 20, 1)
+                    fancytext("\"Thank you for shopping.\"\n", 20, 1)
                 elif dio == 1:
-                    fancytext("\"Pleasure doing buisness with ya.\"", 20, 1)
+                    fancytext("\"Pleasure doing buisness with ya.\"\n", 20, 1)
                 shopq = True
+    fancytext("You exit the shop.\n", 20, 1)
     return monin
 
 
@@ -360,7 +424,7 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
         edef = 8
         ehp = 8
         emon = 25
-        sreq = 5
+        sreq = 2
         gamename = "Sculker"
         print("~\\ /~")
         print(" (o)")
@@ -439,6 +503,8 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
     spare = False
     runaway = False
     spval = 0
+    atkmod = 0
+    defmod = 0
     while battle == True:
         print("Your stats: hp:", hp, "attack", atk(), "defence", deff())
         print("enemy's HP:", ehp)
@@ -458,6 +524,8 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
                     if mercy == True:
                         atkdone = atkdone*2
                     atkdone = atkdone-edef
+                    if atkdone < 0:
+                        atkdone = 0
                     ehp -= atkdone
                     fancytext("\nYou attack and deal ", 20)
                     fancytext(str(atkdone), 20)
@@ -480,15 +548,15 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
                     elif monster == "g_dragon":
                         fancytext("You drooled at the dragon and the dragon was somewhat disgusted by your action...\n", 20, 2)
                     elif monster == "live_tnt":
-                        fancytext("You drenched the Living TNT in water, and it becomes more content.", 20, 2)
+                        fancytext("You drenched the Living TNT in water, and it becomes more content.\n", 20, 2)
                     elif monster == "wolf":
-                        fancytext("You try and pet the wolf, and somewhat succeed.", 20, 2)
+                        fancytext("You try and pet the wolf, and somewhat succeed.\n", 20, 2)
                     elif monster == "g_snail":
-                        fancytext("You wiggled to try and tell the snail something... It seems amused.", 20, 2)
+                        fancytext("You wiggled to try and tell the snail something... It seems amused.\n", 20, 2)
                     elif monster == "sculker":
-                        fancytext("You grab some of the stuff from the ground and throw it at the Sculker to distract it.", 20, 2)
+                        fancytext("You grab some of the stuff from the ground and throw it at the Sculker to distract it.\n", 20, 2)
                     elif monster == "m_yoyo":
-                        fancytext("You grab the yoyo, but it flew free of your grasp, looking a bit upset.", 20, 2)
+                        fancytext("You grab the yoyo, but it flew free of your grasp, looking a bit upset.\n", 20, 2)
                     else:
                         fancytext("You calm the monster down.", 20, 2)
                     spval += 1
@@ -644,7 +712,11 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
                     if batchoice in valquit:
                         fancytext("Going back...\n", 50)
                     elif batchoice in inventory:
-                        gitemuse(batchoice, True)
+                        theu = gitemuse(batchoice, True, boss)
+                        atkmod += theu[0]
+                        defmod += theu[1]
+                        if theu[2] == True:
+                            mercy = True
                         turn = False
                     else:
                         fancytext("You don't have an item called", 30)
@@ -664,16 +736,13 @@ def battle(monster = "g_cube"): #A battle station, spare or murder:bangbang:
             etkdone = eatk + random.randrange(-5,5)
             etkdone = etkdone - deff()
             if atkdone < 0:
-                fancytext("The ", 20)
-                fancytext(gamename, 20)
-                fancytext(" attacks but deals no damage!", 20)
-            else:
-                hp -= etkdone
-                fancytext("The ", 20)
-                fancytext(gamename, 20)
-                fancytext(" attacks and deals ", 20)
-                fancytext(str(etkdone), 20)
-                fancytext(" damage to you!\n", 20, 1)
+                atkdone = 0
+            hp -= etkdone
+            fancytext("The ", 20)
+            fancytext(gamename, 20)
+            fancytext(" attacks and deals ", 20)
+            fancytext(str(etkdone), 20)
+            fancytext(" damage!\n", 20, 1)
             if hp <= 0:
                 killsequence()
         else:
@@ -719,7 +788,7 @@ def leveling(thexp):
 
 
 
-def gitemuse(item, bmode = False):
+def gitemuse(item, bmode = False, bossy = False):
     global inventory
     global weapon
     global armor
@@ -728,32 +797,84 @@ def gitemuse(item, bmode = False):
     global weapon
     global armor
     global keyitems
+    global ghostitems
+    global room
+    used = False
+    
     usedup = True
+    atkmodifier = 0
+    defmodifier = 0
+    instaspare = False
     if item == "Gummy Bears":
-        hp += 12
+        hp += 14
         if hp > maxhp:
             fancytext("You ate the Gummy Bears and your health maxed out!\n", 20, 1)
             hp = maxhp
         else:
-            fancytext("You ate the Gummy Bears and recovered 12 hp!\n", 20, 1)
+            fancytext("You ate the Gummy Bears and recovered 14 hp!\n", 20, 1)
+        used = True
     elif item == "Controller":
         fancytext("You equipped the controller as a weapon.\n", 20, 1)
         atk = 5
         inventory.append(weapon)
         weapon = "Controller"
+        used = True
     elif item == "Generic Sword":
         fancytext("You equipped the Generic Sword.\n", 20, 1)
         inventory.append(weapon)
         weapon = "Generic Sword"
+        used = True
     elif item == "Jacket":
         fancytext("You wore the jacket.\n", 20, 1)
         inventory.append(armor)
         weapon = "Jacket"
+        used = True
+    elif item == "Soft Chips":
+        hp += 10
+        if hp > maxhp:
+            fancytext("You ate the Soft Chips and your health maxed out!\n", 20, 1)
+            hp = maxhp
+        else:
+            fancytext("You ate the Soft Chips and recovered 10 hp!\n", 20, 1)
+        used = True
+    else:
+        if bmode == True:
+            if item == "Attack Ruby":
+                atkmodifier += 1
+                fancytext("You felt the power of the ruby, and your attack increases!\n", 20, 1)
+                used = True
+            elif item == "Convincing Stone":
+                fancytext("You show the enemy the Convincing stone, ", 20)
+                if bossy == True:
+                    fancytext("but they just slam it into the ground!\n", 20, 1)
+                else:
+                    instaspare = True
+                    fancytext("and were in awe of the stone....\n", 20, 1)
+                used = True
+        else:
+            if item == "Gnome":
+                fancytext("You smash the Gnome onto the ground, revealing that it had a key inside!\n", 20, 1)
+                fancytext("You obtained the 'House Key'\n", 20, 1)
+                keyitems.remove("Gnome")
+                ghostitems.append("front_key")
+                keyitems.append("House Key")
+                used = True
+            if item == "House Key" and room == 4:
+                fancytext("You unlocked the door to the house!\n", 20, 1)
+                keyitems.remove("House Key")
+                ghostitems.append("front_open")
+                used = True
+    
+    if used == False:
+        fancytext("This item cannot be used here.", 20, 1)
+        usedup = False
     if usedup == True:
         if not item in keyitems:
             inventory.remove(item)
         else:
             keyitems.remove(item)
+    if bmode == True:
+        return [atkmodifier, defmodifier, instaspare]
         
 
     
@@ -817,12 +938,17 @@ print("Would you like to enable haste mode? (Haste mode instantly prints the tex
 choice = input("\n")
 if choice in valyes:
     haste = True
+elif choice == "speedrun":
+    print("ACTIVATING SPEEDRUN MODE!!!")
+    haste = True
+    speedrun = True
 else:
     haste = False
-fancytext("Do you want to skip the intro?\n", 50)
-choice = input("\n")
-fancytext("To look at the list of what you can do at any time, type in help.\n", 50, 2)
-if (not choice in valyes) or choice in valno:
+if speedrun == False:
+    fancytext("Do you want to skip the intro?\n", 50)
+    choice = input("\n")
+    fancytext("To look at the list of what you can do at any time, type in help.\n", 50, 2)
+if ((not choice in valyes) or choice in valno) and speedrun == False:
     fancytext("Let's begin our story.\n", 20, 2)
     fancytext("Long ago, there was a world called...\n", 20, 2)
     fancytext("I forgor. :skull:\n", 10, 2)
@@ -905,7 +1031,7 @@ while gamenotover == True:
             seeroom(True, 4, "forest")
         elif choice in valeast:
             room = -1
-            seeroom(False, -1, "forest")
+            seeroom(True, -1, "forest")
         elif choice in valwest:
             room = 2
             seeroom(True, 2, "forest")
@@ -916,8 +1042,11 @@ while gamenotover == True:
             default(choice)
     elif room == 4:
         if choice in valnorth:
-            room = 4
-            seeroom(True, 4, "forest")
+            if "front_open" in ghostitems:
+                room = 5
+                seeroom(False, 5)
+            else:
+                fancytext("The door is locked.\n", 20, 1)
         elif choice in valsouth:
             if random.randrange(1,3) == 2:
                 room = 2
@@ -926,15 +1055,20 @@ while gamenotover == True:
                 room = 3
                 seeroom(True, 3, "forest")
         elif choice in valgrab:
-            if not "gnome" in ghostkeys:
-                ghostkeys.append("gnome")
+            if not "gnome" in ghostitems:
+                ghostitems.append("gnome")
                 keyitems.append("Gnome")
                 fancytext("You grabbed the Garden Gnome, and it was added to your ", 20)
                 fancytext("Key items.\n", 10, 1)
                 
         elif choice in vallook:
             fancytext("On this foresty porch, you can make out a cat silhouette in the window.\n", 20, 1)
-            fancytext("\nIt appears that the door to the house is locked, and there is only but a garden gnome on the porch", 20, 2)
+            if "front_open" in ghostitems:
+                fancytext("\nIt appears that the door to the house is locked, ", 20)
+            if "gnome" in ghostitems:
+                fancytext("with there being nothing but a ruined welcome mat on the porch.", 20, 2)
+            else:
+                fancytext("and there is only but a garden gnome on the porch along with a rotten welcome mat.", 20, 2)
         else:
             default(choice)
     elif room == -1:
@@ -942,9 +1076,71 @@ while gamenotover == True:
             room = 3
             seeroom(True, 3, "forest")
         elif choice in valshop:
-            money = shop(valyes, valquit, ("Soft Chips", "Attack Ruby", "Soft Sword", "Pumpkin Helmet", "Convincing Stone", "Iron Sword"), money) 
+            money = shop(valyes, valquit, valhelp, ("Soft Chips", "Attack Ruby", "Soft Sword", "Pumpkin Helmet", "Convincing Stone", "Iron Sword"), money, 1)
+            seeroom(False, -1, "forest")
         elif choice in vallook:
-            fancytext("On this foresty porch, you can make out a cat silhouette in the window.\n", 20, 1)
-            fancytext("\nIt appears that the door to the house is locked, and there is only but a garden gnome on the porch", 20, 2)
+            fancytext("Here there is a shop, it appears to be ran by a living skeleton with a fez hat.\n", 20, 1)
+            fancytext("behind the stand there's deep forest that seams to go on for a good long while, so it would be best to avoid it all together.\n", 20, 2)
         else:
             default(choice)
+    elif room == 5:
+        if choice in valsouth:
+            room = 4
+            seeroom(False, 4, "forest")
+        if choice in valeast:
+            room = 6
+            seeroom(False, 6)
+        elif choice in valgrab:
+            if not "lr_burger" in ghostitems:
+                ghostitems.append("lr_burger")
+                inventory.append("Bear Burger")
+                fancytext("You decided to grab what appeared to be a fresh burger from a table.", 20)
+        elif choice in vallook:
+            fancytext("The living room of this house appears to be filled with all sorts of trinkets and things. A real adventurer must live here.\n", 20, 1)
+            fancytext("You don't know what to grab, if anything, since there just appears to be so much stuff here.", 20, 2)
+        else:
+            default(choice)
+    elif room == 6:
+        if choice in valup:
+            if "up_rope" in ghostitems:
+                room = 7
+                seeroom(False, 7)
+        elif choice in valwest:
+            room = 5
+            seeroom(False, 5)
+        elif choice in valnorth:
+            if "cat" in ghostitems:
+                if not "catunlock" in ghostitems:
+                    ghostitems.append("catunlock")
+                    fancytext("'Oh, of course, hold on...'\n", 20, 1)
+                    fancytext("Zoey inputs the code in for the door... and it opens!\n", 20, 1)
+                room = 11
+                seeroom(False, 11, "lightfor")
+            else:
+                fancytext("The door is locked with a combination.\n", 20, 1)
+        elif choice in valgrab:
+            if not "up_rope" in ghostitems:
+                ghostitems.append("up_rope")
+                fancytext("You grab the rope that is on the roof and pull it revealing a ladder upstairs!\n", 20)
+        elif choice in vallook:
+            fancytext("This coridoor leads to a few different rooms, like a bedroom, bathroom, and kitchen, however, none of which seam as interesting as a hatch that can lead upstairs.\n", 20, 1)
+            if not "up_rope" in ghostitems:
+                fancytext("Maybe you can open it by grabbing the rope that is dangling from it.\n", 20, 2)
+            else:
+                fancytext("You also notice a trans flag in the bedroom.\n", 20, 2)
+                if "cat" in team:
+                    fancytext("'Umm... Don't we have to get you home soon? Or are you just going to keep standing there?'\n", 20, 2)
+        else:
+            default(choice)
+    elif room == 7:
+        if choice in valdown:
+            room = 6
+            seeroom(False, 6)
+        elif choice in valwest:
+            room = 8
+            seeroom(False, 8)
+        elif choice in valgrab:
+            if not "fish_rod" in ghostitems:
+                ghostitems.append("fish_rod")
+                keyitems.append("Fishing Rod")
+                fancytext("You grabbed the only thing in reach, a fishing rod, and it was added to your Key items.", 20, 1)
